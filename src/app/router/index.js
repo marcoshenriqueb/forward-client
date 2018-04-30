@@ -5,6 +5,8 @@ import {
   Redirect,
 } from 'react-router-dom';
 
+import Login from './../pages/login/login';
+
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
     {...rest}
@@ -52,7 +54,7 @@ export default authenticated => [
   <GuestRoute
     key={1}
     path="/login"
-    component={() => <h1>Login</h1>}
+    component={Login}
     isAuthenticated={authenticated}
   />,
 ];

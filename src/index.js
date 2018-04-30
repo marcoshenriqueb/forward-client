@@ -5,6 +5,7 @@ import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/es/integration/react';
 
 import 'normalize.css';
+import 'bootstrap/dist/css/bootstrap.css';
 import store from './app/store';
 import './assets/stylus/index.styl';
 import App from './app/App';
