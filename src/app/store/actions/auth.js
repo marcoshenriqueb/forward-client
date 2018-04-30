@@ -94,6 +94,11 @@ const login = credentials => (
   }
 );
 
+const resetState = (dispatch) => {
+  business.resetBusiness()(dispatch);
+  businessAreas.resetBusinessAreas()(dispatch);
+};
+
 const logout = () => (
   (dispatch) => {
     dispatch(requestToken());
@@ -101,6 +106,7 @@ const logout = () => (
     return api.logout().then((response) => {
       dispatch(receiveToken('', false));
       dispatch(resetUser());
+      resetState(dispatch);
       return response;
     }, error => error);
   }
