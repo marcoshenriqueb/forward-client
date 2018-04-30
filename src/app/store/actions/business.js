@@ -1,5 +1,4 @@
 import api from './../../api';
-import store from './../../store';
 
 const requestBusiness = () => (
   {
@@ -18,11 +17,7 @@ const fetchBusiness = () => (
   (dispatch) => {
     dispatch(requestBusiness());
 
-    return api.businesses.find({
-      query: {
-        _id: store.getState().auth.user.data.business,
-      },
-    }).then((response) => {
+    return api.businesses.find({}).then((response) => {
       dispatch(receiveBusiness(response.data));
       return response;
     }, (error) => {
