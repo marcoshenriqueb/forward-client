@@ -5,8 +5,6 @@ import {
   Redirect,
 } from 'react-router-dom';
 
-const authenticated = true;
-
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
     {...rest}
@@ -43,7 +41,7 @@ GuestRoute.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
 };
 
-export default [
+export default authenticated => [
   <PrivateRoute
     key={0}
     exact

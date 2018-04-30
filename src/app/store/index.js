@@ -7,7 +7,7 @@ import { persistCombineReducers } from 'redux-persist';
 import reducers from './reducers';
 
 const persistConfig = {
-  key: 'root',
+  key: 'forward',
   storage,
 };
 
