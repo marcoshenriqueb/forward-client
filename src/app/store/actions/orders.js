@@ -72,6 +72,18 @@ const fetchOrders = () => (
   }
 );
 
+const createOrder = order => (
+  () => (
+    api.orders.create({
+      ...order,
+    }).then((data) => {
+      console.log(data);
+    }, (error) => {
+      console.log(error);
+    })
+  )
+);
+
 const resetOrdersState = () => (
   {
     type: 'RESET_ORDERS',
@@ -92,4 +104,5 @@ const resetOrders = () => (
 export default {
   fetchOrders,
   resetOrders,
+  createOrder,
 };
