@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import './createOrder.styl';
 import Modal from './../../components/modal/modal';
@@ -167,6 +168,9 @@ class CreateOrder extends Component {
   render() {
     return (
       <div className="d-flex flex-column p-4">
+        <div className="position-absolute">
+          <Link className="lead" to="/">Voltar</Link>
+        </div>
         <div className="d-flex justify-content-center mb-4">
           <h2 className="text-capitalize font-weight-bold">Novo Pedido</h2>
         </div>
