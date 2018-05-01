@@ -1,4 +1,6 @@
 import api from './../../api';
+import business from './business';
+import businessAreas from './businessAreas';
 
 const requestToken = () => (
   {
@@ -33,11 +35,11 @@ const resetUser = () => (
   }
 );
 
-const fetchUser = email => (
+const fetchUser = () => (
   (dispatch) => {
     dispatch(requestUser());
 
-    return api.users.find({ email })
+    return api.users.find({})
       .then((response) => {
         dispatch(receiveUser(response.data[0]));
         return response;
@@ -46,6 +48,14 @@ const fetchUser = email => (
         return error;
       });
   }
+);
+
+const fetchGeneralBusinessResources = dispatch => (
+  Promise.all([
+    fetchUser()(dispatch),
+    business.fetchBusiness()(dispatch),
+    businessAreas.fetchBusinessAreas()(dispatch),
+  ])
 );
 
 const checkToken = token => (
@@ -57,6 +67,7 @@ const checkToken = token => (
       accessToken: token,
     }).then((response) => {
       dispatch(receiveToken(response.accessToken, true));
+      fetchGeneralBusinessResources(dispatch);
       return response;
     }, (error) => {
       dispatch(receiveToken('', false));
@@ -73,9 +84,8 @@ const login = credentials => (
       strategy: 'local',
       ...credentials,
     }).then((response) => {
-      fetchUser(credentials.email)(dispatch).then(() => {
-        dispatch(receiveToken(response.accessToken, true));
-      });
+      dispatch(receiveToken(response.accessToken, true));
+      fetchGeneralBusinessResources(dispatch);
       return response;
     }, (error) => {
       dispatch(receiveToken('', false));
@@ -84,6 +94,11 @@ const login = credentials => (
   }
 );
 
+const resetState = (dispatch) => {
+  business.resetBusiness()(dispatch);
+  businessAreas.resetBusinessAreas()(dispatch);
+};
+
 const logout = () => (
   (dispatch) => {
     dispatch(requestToken());
@@ -91,6 +106,7 @@ const logout = () => (
     return api.logout().then((response) => {
       dispatch(receiveToken('', false));
       dispatch(resetUser());
+      resetState(dispatch);
       return response;
     }, error => error);
   }

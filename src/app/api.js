@@ -27,4 +27,6 @@ export default {
   auth: feathersClient.authenticate,
   logout: feathersClient.logout,
   users: feathersClient.service('users'),
+  businesses: feathersClient.service('businesses'),
+  businessAreas: feathersClient.service('business-areas'),
 };
