@@ -22,7 +22,7 @@ const menuCategories = (state = initialState, action) => {
         menuCategories: {
           isFetching: false,
           lastUpdated: Date.now(),
-          data: action.items,
+          data: action.menuCategories,
         },
       });
 

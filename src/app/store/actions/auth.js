@@ -1,6 +1,10 @@
 import api from './../../api';
 import businesses from './businesses';
 import businessAreas from './businessAreas';
+import menuCategories from './menuCategories';
+import menuItems from './menuItems';
+import paymentMethods from './paymentMethods';
+
 
 const requestToken = () => (
   {
@@ -55,6 +59,9 @@ const fetchGeneralBusinessResources = dispatch => (
     fetchUser()(dispatch),
     businesses.fetchBusiness()(dispatch),
     businessAreas.fetchBusinessAreas()(dispatch),
+    menuCategories.fetchMenuCategories()(dispatch),
+    menuItems.fetchMenuItems()(dispatch),
+    paymentMethods.fetchPaymentMethods()(dispatch),
   ])
 );
 
