@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 
 import Login from './../pages/login/login';
-import Menu from './../pages/menu/menu';
+import Dashboard from './../pages/dashboard/dashboard';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
@@ -49,7 +49,7 @@ export default authenticated => [
     key={0}
     exact
     path="/"
-    component={Menu}
+    component={Dashboard}
     isAuthenticated={authenticated}
   />,
   <GuestRoute
