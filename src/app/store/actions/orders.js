@@ -53,7 +53,7 @@ const removedCallback = (message) => {
   store.dispatch(removeOrder(message));
 };
 
-const fetchOrders = (query = {}) => (
+const fetchOrders = () => (
   (dispatch) => {
     dispatch(requestOrders());
 

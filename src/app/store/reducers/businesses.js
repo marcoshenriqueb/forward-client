@@ -6,7 +6,7 @@ const initialState = {
   },
 };
 
-const business = (state = initialState, action) => {
+const businesses = (state = initialState, action) => {
   switch (action.type) {
     case 'REQUEST_BUSINESS':
       return Object.assign({}, state, {
@@ -34,4 +34,4 @@ const business = (state = initialState, action) => {
   }
 };
 
-export default business;
+export default businesses;

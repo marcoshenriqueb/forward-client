@@ -1,5 +1,5 @@
 import auth from './auth';
-import business from './business';
+import businesses from './businesses';
 import businessAreas from './businessAreas';
 import menuCategories from './menuCategories';
 import menuItems from './menuItems';
@@ -9,7 +9,7 @@ import paymentMethods from './paymentMethods';
 
 export default {
   ...auth,
-  ...business,
+  ...businesses,
   ...businessAreas,
   ...menuCategories,
   ...menuItems,
