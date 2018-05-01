@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import './dashboard.styl';
 
@@ -13,7 +14,9 @@ const Dashboard = ({
         <button className="btn btn-outline-primary btn-lg mb-3" key={a.name}>{a.name}</button>
       ))
     }
-    <button className="btn btn-outline-success btn-lg mb-3">Novo pedido</button>
+    <Link to="/novo-pedido">
+      <button className="btn btn-outline-success btn-lg mb-3">Novo pedido</button>
+    </Link>
   </div>
 );
 

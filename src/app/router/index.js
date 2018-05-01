@@ -7,6 +7,7 @@ import {
 
 import Login from './../pages/login/login';
 import Dashboard from './../pages/dashboard/dashboard';
+import CreateOrder from './../pages/createOrder/createOrder';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
@@ -56,6 +57,12 @@ export default authenticated => [
     key={1}
     path="/login"
     component={Login}
+    isAuthenticated={authenticated}
+  />,
+  <PrivateRoute
+    key={2}
+    path="/novo-pedido"
+    component={CreateOrder}
     isAuthenticated={authenticated}
   />,
 ];
