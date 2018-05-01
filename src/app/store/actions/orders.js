@@ -76,10 +76,7 @@ const createOrder = order => (
   () => (
     api.orders.create({
       ...order,
-    }).then((data) => {
-      console.log(data);
-    }, (error) => {
-      console.log(error);
+    }).then(() => {
     })
   )
 );

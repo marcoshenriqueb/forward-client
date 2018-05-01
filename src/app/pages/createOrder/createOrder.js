@@ -25,6 +25,7 @@ class CreateOrder extends Component {
       menuItems: [],
       errors: {},
       modal: false,
+      savingForm: false,
     };
 
     this.onFormChange = this.onFormChange.bind(this);
@@ -62,7 +63,7 @@ class CreateOrder extends Component {
         ...validateRules(['required'], data.paymentMethod),
       ],
       menuItems: [
-        ...validateRules(['required'], data.menuItems),
+        ...validateRules(['min:1'], data.menuItems),
       ],
     };
 
@@ -75,13 +76,30 @@ class CreateOrder extends Component {
       return;
     }
 
-    this.props.createOrder(data).then((response) => {
-      console.log(response);
+    this.setState({
+      savingForm: true,
+    });
+    this.props.createOrder(data).then(() => {
+      this.setState({
+        form: {
+          number: '',
+          clientName: '',
+          address: '',
+          paymentMethod: '',
+          change: '',
+        },
+        menuItems: [],
+        savingForm: false,
+      });
     });
   }
 
   getCategoryItems(categoryId) {
     return this.props.menuItems.data.filter(i => i.menuCategory === categoryId);
+  }
+
+  getMenuItemName(menuItemId) {
+    return this.props.menuItems.data.filter(i => i._id === menuItemId)[0].name || '';
   }
 
   countMenuItems(itemId) {
@@ -128,7 +146,7 @@ class CreateOrder extends Component {
     return (
       <div className="d-flex flex-column p-4">
         <div className="d-flex justify-content-center mb-4">
-          <h2 className="text-primary text-capitalize font-weight-bold">Novo Pedido</h2>
+          <h2 className="text-capitalize font-weight-bold">Novo Pedido</h2>
         </div>
         <div className="row">
           <div className="col-md-6 offset-md-3">
@@ -137,7 +155,7 @@ class CreateOrder extends Component {
                 <div className="col-sm-6">
                   { buildFormGroup('Número', {
                     type: 'number',
-                    value: this.state.number,
+                    value: this.state.form.number,
                     error: this.state.errors.number,
                     onInput: e => this.onFormChange({ number: e.target.value }),
                   }) }
@@ -145,7 +163,7 @@ class CreateOrder extends Component {
                 <div className="col-sm-6">
                   { buildFormGroup('Nome do Cliente', {
                     type: 'text',
-                    value: this.state.clientName,
+                    value: this.state.form.clientName,
                     error: this.state.errors.clientName,
                     onInput: e => this.onFormChange({ clientName: e.target.value }),
                   }) }
@@ -155,7 +173,7 @@ class CreateOrder extends Component {
                 <div className="col-sm-12">
                   { buildFormGroup('Endereço', {
                     type: 'text',
-                    value: this.state.address,
+                    value: this.state.form.address,
                     error: this.state.errors.address,
                     onInput: e => this.onFormChange({ address: e.target.value }),
                   }) }
@@ -168,7 +186,7 @@ class CreateOrder extends Component {
                     options: this.props.paymentMethods.data.map(p => (
                       { value: p._id, name: p.name }
                     )),
-                    value: this.state.paymentMethod,
+                    value: this.state.form.paymentMethod,
                     error: this.state.errors.paymentMethod,
                     onChange: e => this.onFormChange({ paymentMethod: e.target.value }),
                   }) }
@@ -176,7 +194,7 @@ class CreateOrder extends Component {
                 <div className="col-sm-6">
                   { buildFormGroup('Troco', {
                     type: 'number',
-                    value: this.state.change,
+                    value: this.state.form.change,
                     error: this.state.errors.change,
                     onInput: e => this.onFormChange({ change: e.target.value }),
                   }) }
@@ -185,14 +203,17 @@ class CreateOrder extends Component {
 
               <hr />
 
-              <ul>
+              <p className="text-secondary">Pedido</p>
+              <ul className="list-group mb-2">
                 {this.state.menuItems.map((i, k) => (
-                  <li key={`_${k + 1}`}>{i.menuItem}</li>
+                  <li className="list-group-item" key={`_${k + 1}`}>
+                    {this.getMenuItemName(i.menuItem)}
+                  </li>
                 ))}
               </ul>
 
               <button
-                className="btn btn-outline-secondary btn-block"
+                className="btn btn-outline-primary btn-block"
                 onClick={(e) => {
                   e.preventDefault();
                   this.setState({ modal: true });
@@ -202,7 +223,7 @@ class CreateOrder extends Component {
               </button>
               {
                 this.state.errors.menuItems && this.state.errors.menuItems.length ?
-                  <p className="text-danger">Adicione pelo menos 1 item.</p> : null
+                  <small className="text-danger">{this.state.errors.menuItems[0]}</small> : null
               }
 
               <hr />
@@ -211,6 +232,7 @@ class CreateOrder extends Component {
                 type="submit"
                 className="btn btn-block btn-primary mb-2"
                 onClick={this.onSaveOrder}
+                disabled={this.state.savingForm}
               >
                 Salvar
               </button>

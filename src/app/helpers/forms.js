@@ -46,7 +46,7 @@ export default {
     const hasError = attr.error && attr.error.length;
     return (
       <div className="form-group">
-        <label htmlFor={attr.id}>{name}</label>
+        <label className="text-secondary" htmlFor={attr.id}>{name}</label>
         {
           attr.type === 'select' ?
             <select
