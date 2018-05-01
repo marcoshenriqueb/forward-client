@@ -104,6 +104,9 @@ const login = credentials => (
 const resetState = (dispatch) => {
   businesses.resetBusiness()(dispatch);
   businessAreas.resetBusinessAreas()(dispatch);
+  menuCategories.resetMenuCategories()(dispatch);
+  menuItems.resetMenuItems()(dispatch);
+  paymentMethods.resetPaymentMethods()(dispatch);
 };
 
 const logout = () => (
