@@ -1,5 +1,5 @@
 import api from './../../api';
-import business from './business';
+import businesses from './businesses';
 import businessAreas from './businessAreas';
 
 const requestToken = () => (
@@ -53,7 +53,7 @@ const fetchUser = () => (
 const fetchGeneralBusinessResources = dispatch => (
   Promise.all([
     fetchUser()(dispatch),
-    business.fetchBusiness()(dispatch),
+    businesses.fetchBusiness()(dispatch),
     businessAreas.fetchBusinessAreas()(dispatch),
   ])
 );
@@ -95,7 +95,7 @@ const login = credentials => (
 );
 
 const resetState = (dispatch) => {
-  business.resetBusiness()(dispatch);
+  businesses.resetBusiness()(dispatch);
   businessAreas.resetBusinessAreas()(dispatch);
 };
 
