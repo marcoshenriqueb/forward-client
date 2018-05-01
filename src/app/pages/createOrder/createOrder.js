@@ -26,15 +26,37 @@ class CreateOrder extends Component {
       errors: {},
       modal: false,
       savingForm: false,
+      obsFormItem: '',
+      obsFormValue: '',
     };
 
     this.onFormChange = this.onFormChange.bind(this);
     this.onSaveOrder = this.onSaveOrder.bind(this);
+    this.onObsFormClick = this.onObsFormClick.bind(this);
   }
 
   onFormChange(data) {
     this.setState({
       form: Object.assign({}, this.state.form, data),
+    });
+  }
+
+  onObsFormClick(e) {
+    e.preventDefault();
+
+    this.setState({
+      menuItems: this.state.menuItems.map((i, k) => {
+        if (k === this.state.obsFormItem) {
+          return {
+            ...i,
+            notes: this.state.obsFormValue,
+          };
+        }
+
+        return i;
+      }),
+      obsFormValue: '',
+      obsFormItem: '',
     });
   }
 
@@ -206,8 +228,52 @@ class CreateOrder extends Component {
               <p className="text-secondary">Pedido</p>
               <ul className="list-group mb-2">
                 {this.state.menuItems.map((i, k) => (
-                  <li className="list-group-item" key={`_${k + 1}`}>
-                    {this.getMenuItemName(i.menuItem)}
+                  <li
+                    className="list-group-item d-flex flex-column"
+                    key={`_${k + 1}`}
+                  >
+                    <div className="w-100 d-flex justify-content-between align-items-center">
+                      {this.getMenuItemName(i.menuItem)}
+                      <button
+                        className="btn btn-outline-primary btn-sm"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.setState({ obsFormItem: k, obsFormValue: i.notes ? i.notes : '' });
+                        }}
+                      >
+                        OBS
+                      </button>
+                    </div>
+                    {
+                      this.state.obsFormItem === k ?
+                        <div className="input-group mt-2">
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Observação"
+                            value={this.state.obsFormValue}
+                            onChange={e => this.setState({ obsFormValue: e.target.value })}
+                          />
+                          <div className="input-group-append">
+                            <button
+                              className="btn btn-outline-primary"
+                              onClick={this.onObsFormClick}
+                            >
+                              +
+                            </button>
+                            <button
+                              className="btn btn-outline-danger"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                this.setState({ obsFormItem: '', obsFormValue: '' });
+                              }}
+                            >
+                              x
+                            </button>
+                          </div>
+                        </div> :
+                        <small>{i.notes}</small>
+                    }
                   </li>
                 ))}
               </ul>
@@ -219,7 +285,7 @@ class CreateOrder extends Component {
                   this.setState({ modal: true });
                 }}
               >
-                Adicionar Itens
+                Editar Itens
               </button>
               {
                 this.state.errors.menuItems && this.state.errors.menuItems.length ?
