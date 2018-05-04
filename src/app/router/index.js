@@ -68,7 +68,7 @@ export default authenticated => [
   />,
   <PrivateRoute
     key={3}
-    path="/pedidos/:areaID"
+    path="/pedidos/:area"
     component={Orders}
     isAuthenticated={authenticated}
   />,

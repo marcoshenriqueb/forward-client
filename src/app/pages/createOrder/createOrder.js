@@ -70,6 +70,7 @@ class CreateOrder extends Component {
     const data = {
       ...this.state.form,
       menuItems: [...this.state.menuItems],
+      step: 1,
     };
 
     const errors = {
