@@ -23,10 +23,9 @@ class Dashboard extends Component {
           <div className="d-flex">
             {
               this.props.businessAreas.data.map(a => (
-                <Link to={`/pedidos/${a._id}`}>
+                <Link to={`/pedidos/${a._id}`} key={a.name}>
                   <button
                     className="btn btn-outline-primary btn-lg mr-1"
-                    key={a.name}
                   >
                     {a.name}
                   </button>

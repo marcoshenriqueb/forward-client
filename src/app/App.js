@@ -4,6 +4,8 @@ import {
   BrowserRouter as Router,
 } from 'react-router-dom';
 import { connect } from 'react-redux';
+import momentDurationFormatSetup from 'moment-duration-format';
+import moment from 'moment';
 import Routes from './router';
 
 import actions from './store/actions';
@@ -16,6 +18,8 @@ class App extends Component {
     this.state = {
       loading: props.token.length,
     };
+
+    momentDurationFormatSetup(moment);
   }
 
   componentDidMount() {
