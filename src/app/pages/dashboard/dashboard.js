@@ -6,7 +6,10 @@ import { Link } from 'react-router-dom';
 import './dashboard.styl';
 import actions from './../../store/actions';
 
-const { logout: logoutAction, fetchOrders: fetchOrdersAction } = actions;
+const {
+  logout: logoutAction,
+  fetchOrders: fetchOrdersAction,
+} = actions;
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -20,12 +23,13 @@ class Dashboard extends Component {
           <div className="d-flex">
             {
               this.props.businessAreas.data.map(a => (
-                <button
-                  className="btn btn-outline-primary btn-lg mr-1"
-                  key={a.name}
-                >
-                  {a.name}
-                </button>
+                <Link to={`/pedidos/${a._id}`} key={a.name}>
+                  <button
+                    className="btn btn-outline-primary btn-lg mr-1"
+                  >
+                    {a.name}
+                  </button>
+                </Link>
               ))
             }
             <Link to="/novo-pedido">

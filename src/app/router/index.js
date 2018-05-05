@@ -7,6 +7,7 @@ import {
 
 import Login from './../pages/login/login';
 import Dashboard from './../pages/dashboard/dashboard';
+import Orders from './../pages/orders/orders';
 import CreateOrder from './../pages/createOrder/createOrder';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
@@ -63,6 +64,12 @@ export default authenticated => [
     key={2}
     path="/novo-pedido"
     component={CreateOrder}
+    isAuthenticated={authenticated}
+  />,
+  <PrivateRoute
+    key={3}
+    path="/pedidos/:area"
+    component={Orders}
     isAuthenticated={authenticated}
   />,
 ];
