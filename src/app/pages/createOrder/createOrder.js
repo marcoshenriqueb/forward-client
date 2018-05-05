@@ -29,6 +29,7 @@ class CreateOrder extends Component {
       savingForm: false,
       obsFormItem: '',
       obsFormValue: '',
+      fastItemInputCode: '',
     };
 
     this.onFormChange = this.onFormChange.bind(this);
@@ -149,11 +150,59 @@ class CreateOrder extends Component {
     });
   }
 
+  addItemByCode(code) {
+    this.setState({
+      errors: Object.assign({}, this.state.errors, {
+        menuItems: [],
+      }),
+    });
+
+    const menuItems = [...this.state.menuItems];
+
+    const filteredItens = this.props.menuItems.data
+      .filter(i => i.number === Number(code));
+
+    if (filteredItens.length) {
+      menuItems.push({
+        menuItem: filteredItens[0]._id,
+      });
+      this.setState({
+        menuItems,
+        fastItemInputCode: '',
+      });
+    } else {
+      this.setState({
+        errors: Object.assign({}, this.state.errors, {
+          menuItems: [
+            'Código inexistente.',
+          ],
+        }),
+      });
+    }
+  }
+
   removeMenuItem(itemId) {
     const menuItems = [...this.state.menuItems];
 
     menuItems.some((i, k) => {
       if (i.menuItem === itemId) {
+        menuItems.splice(k, 1);
+        return true;
+      }
+
+      return false;
+    });
+
+    this.setState({
+      menuItems,
+    });
+  }
+
+  removeMenuItemByIndex(index) {
+    const menuItems = [...this.state.menuItems];
+
+    menuItems.some((i, k) => {
+      if (k === index) {
         menuItems.splice(k, 1);
         return true;
       }
@@ -177,7 +226,7 @@ class CreateOrder extends Component {
         </div>
         <div className="row">
           <div className="col-md-6 offset-md-3">
-            <form className="login-form">
+            <div className="login-form">
               <div className="row">
                 <div className="col-sm-6">
                   { buildFormGroup('Número', {
@@ -231,23 +280,34 @@ class CreateOrder extends Component {
               <hr />
 
               <p className="text-secondary">Pedido</p>
-              <ul className="list-group mb-2">
+              <ul className="mb-3">
                 {this.state.menuItems.map((i, k) => (
                   <li
-                    className="list-group-item d-flex flex-column"
+                    className="d-flex flex-column mb-2"
                     key={`_${k + 1}`}
                   >
                     <div className="w-100 d-flex justify-content-between align-items-center">
                       {this.getMenuItemName(i.menuItem)}
-                      <button
-                        className="btn btn-outline-primary btn-sm"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          this.setState({ obsFormItem: k, obsFormValue: i.notes ? i.notes : '' });
-                        }}
-                      >
-                        OBS
-                      </button>
+                      <div className="d-flex">
+                        <button
+                          className="btn btn-outline-primary btn-sm mr-2"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            this.setState({ obsFormItem: k, obsFormValue: i.notes ? i.notes : '' });
+                          }}
+                        >
+                          OBS
+                        </button>
+                        <button
+                          className="btn btn-outline-danger btn-sm"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            this.removeMenuItemByIndex(k);
+                          }}
+                        >
+                          Remover
+                        </button>
+                      </div>
                     </div>
                     {
                       this.state.obsFormItem === k ?
@@ -277,21 +337,43 @@ class CreateOrder extends Component {
                             </button>
                           </div>
                         </div> :
-                        <small>{i.notes}</small>
+                        <small className="pl-2">{i.notes}</small>
                     }
                   </li>
                 ))}
               </ul>
 
-              <button
-                className="btn btn-outline-primary btn-block"
-                onClick={(e) => {
-                  e.preventDefault();
-                  this.setState({ modal: true });
-                }}
-              >
-                Editar Itens
-              </button>
+              <div className="row">
+                <div className="col-6">
+                  <button
+                    className="btn btn-outline-primary btn-block"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.setState({
+                        errors: Object.assign({}, this.state.errors, {
+                          menuItems: [],
+                        }),
+                        modal: true,
+                      });
+                    }}
+                  >
+                    Lista de Itens
+                  </button>
+                </div>
+                <div className="col-6">
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="Código"
+                    value={this.state.fastItemInputCode}
+                    onInput={e => this.setState({ fastItemInputCode: e.target.value })}
+                    onKeyDown={(e) => {
+                      if (e.keyCode !== 13) return;
+                      this.addItemByCode(e.target.value);
+                    }}
+                  />
+                </div>
+              </div>
               {
                 this.state.errors.menuItems && this.state.errors.menuItems.length ?
                   <small className="text-danger">{this.state.errors.menuItems[0]}</small> : null
@@ -307,7 +389,7 @@ class CreateOrder extends Component {
               >
                 Salvar
               </button>
-            </form>
+            </div>
           </div>
         </div>
         <Modal
