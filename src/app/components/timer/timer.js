@@ -30,7 +30,7 @@ class Timer extends Component {
 }
 
 Timer.propTypes = {
-  date: PropTypes.shape({}).isRequired,
+  date: PropTypes.string.isRequired,
 };
 
 export default Timer;

@@ -4,6 +4,7 @@ import businessAreas from './businessAreas';
 import menuCategories from './menuCategories';
 import menuItems from './menuItems';
 import paymentMethods from './paymentMethods';
+import orders from './orders';
 
 
 const requestToken = () => (
@@ -62,6 +63,7 @@ const fetchGeneralBusinessResources = dispatch => (
     menuCategories.fetchMenuCategories()(dispatch),
     menuItems.fetchMenuItems()(dispatch),
     paymentMethods.fetchPaymentMethods()(dispatch),
+    orders.fetchOrders()(dispatch),
   ])
 );
 
@@ -107,6 +109,7 @@ const resetState = (dispatch) => {
   menuCategories.resetMenuCategories()(dispatch);
   menuItems.resetMenuItems()(dispatch);
   paymentMethods.resetPaymentMethods()(dispatch);
+  orders.resetOrders()(dispatch);
 };
 
 const logout = () => (
