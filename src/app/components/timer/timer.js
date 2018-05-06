@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
+import './timer.styl';
+
 class Timer extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +27,7 @@ class Timer extends Component {
   }
 
   render() {
-    return <h3 className="card-title">{this.state.counter}</h3>;
+    return <h2 className="card-title timer-text text-center">{this.state.counter}</h2>;
   }
 }
 
