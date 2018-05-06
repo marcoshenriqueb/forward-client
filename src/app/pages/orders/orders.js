@@ -23,7 +23,7 @@ class Orders extends Component {
   render() {
     return (
       <div
-        className="orders-container d-flex align-items-center justify-content-center"
+        className="orders-container w-100 d-flex align-items-center"
       >
         <div className="cards-deck deck-container d-flex flex p-3">
           {
