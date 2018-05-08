@@ -81,9 +81,9 @@ const createOrder = order => (
   )
 );
 
-const updateOrderStep = (bill, step) => (
+const updateOrderAttribute = (bill, options) => (
   dispatch => (
-    api.orders.patch(bill, { step })
+    api.orders.patch(bill, { ...options })
       .then((response) => {
         dispatch(updateOrder(response[0] || {}));
         return response;
@@ -112,5 +112,5 @@ export default {
   fetchOrders,
   resetOrders,
   createOrder,
-  updateOrderStep,
+  updateOrderAttribute,
 };

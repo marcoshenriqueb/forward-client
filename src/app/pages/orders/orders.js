@@ -2,15 +2,26 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import Modal from './../../components/modal/modal';
 import Timer from './../../components/timer/timer';
 import actions from './../../store/actions';
 import './orders.styl';
 
 const {
-  updateOrderStep: updateOrderStepAction,
+  updateOrderAttribute: updateOrderAttributeAction,
 } = actions;
 
 class Orders extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      modal: false,
+      id: null,
+      step: null,
+    };
+  }
+
   getMenuItem(id) {
     const result = this.props.menuItems.data.filter(i => i._id === id);
 
@@ -31,10 +42,11 @@ class Orders extends Component {
     return result.length ? result[0] : {};
   }
 
-  dispatchNextArea(id, orderStep) {
-    const step = 1 + orderStep;
+  dispatchNextArea() {
+    const step = 1 + this.state.step;
 
-    this.props.updateOrderStep(id, step);
+    Promise.resolve(this.props.updateOrderAttribute(this.state.id, { step }))
+      .then(() => this.setState({ modal: false, step: null, id: null }));
   }
 
   render() {
@@ -109,7 +121,11 @@ class Orders extends Component {
                 <div className="card-footer text-center px-0">
                   <button
                     className="btn btn-outline-primary btn-block btn-md mr-1"
-                    onClick={() => this.dispatchNextArea(o._id, o.step)}
+                    onClick={() => this.setState({
+                      modal: true,
+                      id: o._id,
+                      step: o.step,
+                    })}
                   >
                     Finalizado
                   </button>
@@ -118,6 +134,26 @@ class Orders extends Component {
             ))
           }
         </div>
+        <Modal
+          title="Confirmar finalização?"
+          show={this.state.modal}
+          onClose={() => this.setState({ modal: false, step: null, id: null })}
+        >
+          <div className="w-100">
+            <button
+              className="btn btn-block btn-primary"
+              onClick={() => this.dispatchNextArea()}
+            >
+              Finalizar
+            </button>
+            <button
+              className="btn btn-block btn-secondary"
+              onClick={() => this.setState({ modal: false, id: null, step: null })}
+            >
+              Cancelar
+            </button>
+          </div>
+        </Modal>
       </div>
     );
   }
@@ -144,7 +180,7 @@ Orders.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({ area: PropTypes.string.isRequired }).isRequired,
   }).isRequired,
-  updateOrderStep: PropTypes.func.isRequired,
+  updateOrderAttribute: PropTypes.func.isRequired,
 };
 
 const OrdersConnector = connect(state => (
@@ -157,8 +193,8 @@ const OrdersConnector = connect(state => (
   }
 ), dispatch => (
   {
-    updateOrderStep: (bill, step) => (
-      dispatch(updateOrderStepAction(bill, step))
+    updateOrderAttribute: (bill, options) => (
+      dispatch(updateOrderAttributeAction(bill, options))
     ),
   }
 ))(Orders);
