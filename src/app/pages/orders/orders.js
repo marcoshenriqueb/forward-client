@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import Modal from './../../components/modal/modal';
 import Timer from './../../components/timer/timer';
@@ -44,8 +45,9 @@ class Orders extends Component {
 
   dispatchNextArea() {
     const step = 1 + this.state.step;
+    const counterTimeStart = moment();
 
-    Promise.resolve(this.props.updateOrderAttribute(this.state.id, { step }))
+    Promise.resolve(this.props.updateOrderAttribute(this.state.id, { step, counterTimeStart }))
       .then(() => this.setState({ modal: false, step: null, id: null }));
   }
 
