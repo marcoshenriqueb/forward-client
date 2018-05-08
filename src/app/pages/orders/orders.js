@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Timer from './../../components/timer/timer';
+import actions from './../../store/actions';
 import './orders.styl';
+
+const {
+  updateOrderStep: updateOrderStepAction,
+} = actions;
 
 class Orders extends Component {
   getMenuItem(id) {
@@ -12,12 +17,24 @@ class Orders extends Component {
     return result.length ? result[0] : {};
   }
 
-  getAreaStep() {
+  getArea() {
     const result = this.props.businessAreas.data.filter(a => (
       a._id === this.props.match.params.area
     ));
 
     return result.length ? result[0] : {};
+  }
+
+  getPaymentMethod(id) {
+    const result = this.props.paymentMethods.data.filter(m => m._id === id);
+
+    return result.length ? result[0] : {};
+  }
+
+  dispatchNextArea(id, orderStep) {
+    const step = 1 + orderStep;
+
+    this.props.updateOrderStep(id, step);
   }
 
   render() {
@@ -28,7 +45,7 @@ class Orders extends Component {
         <div className="cards-deck deck-container d-flex flex p-3">
           {
             this.props.orders.data
-            .filter(o => this.getAreaStep().step === o.step)
+            .filter(o => this.getArea().step === o.step)
             .map((o, k) => (
               <div className="card deck-card mx-2" key={`${k + 1}`}>
                 <div className="card-header card-header-padding">
@@ -37,7 +54,7 @@ class Orders extends Component {
                   </h2>
                   <Timer date={o.counterTimeStart} />
                 </div>
-                <ul className="cards-body list-group card-menu-items" id="custom-scroll">
+                <ul className="cards-body list-group card-menu-items mb-auto" id="custom-scroll">
                   {
                     this.props.menuCategories.data.map((c, m) => {
                       if (!o.menuItems.map(i => this.getMenuItem(i.menuItem).menuCategory)
@@ -73,15 +90,27 @@ class Orders extends Component {
                     })
                   }
                 </ul>
-                <iframe
-                  title="map"
-                  frameBorder="0"
-                  src={'https://www.google.com/maps/embed/v1/place' +
-                  '?key=AIzaSyBgHOp2wZTsCyPWQy1HyrnRFwYKGgQCRVU' +
-                  `&q=${encodeURIComponent(o.address)}`}
-                />
+                {
+                  this.getArea().showPaymentMethods ?
+                    <p className="text-center mb-0 card-change-text">
+                      Pagamento: {this.getPaymentMethod(o.paymentMethod).name}
+                      {o.change !== null ? ` - Troco: ${o.change}` : null}
+                    </p> : null
+                }
+                {
+                  this.getArea().showAddress ? <iframe
+                    title="map"
+                    frameBorder="0"
+                    src={'https://www.google.com/maps/embed/v1/place' +
+                    '?key=AIzaSyBgHOp2wZTsCyPWQy1HyrnRFwYKGgQCRVU' +
+                    `&q=${encodeURIComponent(o.address)}`}
+                  /> : null
+                }
                 <div className="card-footer text-center px-0">
-                  <button className="btn btn-outline-primary btn-block btn-md mr-1">
+                  <button
+                    className="btn btn-outline-primary btn-block btn-md mr-1"
+                    onClick={() => this.dispatchNextArea(o._id, o.step)}
+                  >
                     Finalizado
                   </button>
                 </div>
@@ -109,9 +138,13 @@ Orders.propTypes = {
   menuItems: PropTypes.shape({
     data: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
   }).isRequired,
+  paymentMethods: PropTypes.shape({
+    data: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
+  }).isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({ area: PropTypes.string.isRequired }).isRequired,
   }).isRequired,
+  updateOrderStep: PropTypes.func.isRequired,
 };
 
 const OrdersConnector = connect(state => (
@@ -120,9 +153,13 @@ const OrdersConnector = connect(state => (
     businessAreas: state.businessAreas.businessAreas,
     menuCategories: state.menuCategories.menuCategories,
     menuItems: state.menuItems.menuItems,
+    paymentMethods: state.paymentMethods.paymentMethods,
   }
-), () => (
+), dispatch => (
   {
+    updateOrderStep: (bill, step) => (
+      dispatch(updateOrderStepAction(bill, step))
+    ),
   }
 ))(Orders);
 

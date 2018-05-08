@@ -81,6 +81,16 @@ const createOrder = order => (
   )
 );
 
+const updateOrderStep = (bill, step) => (
+  dispatch => (
+    api.orders.patch(bill, { step })
+      .then((response) => {
+        dispatch(updateOrder(response[0] || {}));
+        return response;
+      }, error => error)
+  )
+);
+
 const resetOrdersState = () => (
   {
     type: 'RESET_ORDERS',
@@ -102,4 +112,5 @@ export default {
   fetchOrders,
   resetOrders,
   createOrder,
+  updateOrderStep,
 };
