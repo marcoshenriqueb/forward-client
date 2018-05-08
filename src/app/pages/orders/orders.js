@@ -54,12 +54,12 @@ class Orders extends Component {
       <div
         className="orders-container w-100 d-flex align-items-center"
       >
-        <div className="cards-deck deck-container d-flex flex p-3">
+        <div className="cards-deck deck-container d-flex flex p-3 row">
           {
             this.props.orders.data
             .filter(o => this.getArea().step === o.step)
             .map((o, k) => (
-              <div className="card deck-card mx-2" key={`${k + 1}`}>
+              <div className="card deck-card mx-2 mb-2" key={`${k + 1}`}>
                 <div className="card-header card-header-padding">
                   <h2 className="card-title card-header-title text-center">
                     #{`${o.number} - ${o.clientName}`}
