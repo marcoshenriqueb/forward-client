@@ -13,6 +13,7 @@ class Timer extends Component {
   }
 
   componentDidMount() {
+    this.tick();
     this.timer = setInterval(this.tick.bind(this), 1000);
   }
 
