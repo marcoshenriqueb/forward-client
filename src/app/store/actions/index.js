@@ -6,6 +6,7 @@ import menuItems from './menuItems';
 import motoboys from './motoboys';
 import orders from './orders';
 import paymentMethods from './paymentMethods';
+import ifood from './ifood';
 
 export default {
   ...auth,
@@ -16,4 +17,5 @@ export default {
   ...motoboys,
   ...orders,
   ...paymentMethods,
+  ...ifood,
 };

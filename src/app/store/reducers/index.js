@@ -6,6 +6,7 @@ import menuItems from './menuItems';
 import motoboys from './motoboys';
 import orders from './orders';
 import paymentMethods from './paymentMethods';
+import ifood from './ifood';
 
 const store = {
   auth,
@@ -16,6 +17,7 @@ const store = {
   motoboys,
   orders,
   paymentMethods,
+  ifood,
 };
 
 export default store;

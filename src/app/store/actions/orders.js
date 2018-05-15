@@ -76,8 +76,7 @@ const createOrder = order => (
   () => (
     api.orders.create({
       ...order,
-    }).then(() => {
-    })
+    }).then(r => console.log(r))
   )
 );
 

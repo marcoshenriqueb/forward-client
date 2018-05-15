@@ -3,6 +3,7 @@ import socketio from 'feathers-socketio/client';
 import hooks from 'feathers-hooks';
 import auth from 'feathers-authentication-client';
 import io from 'socket.io-client';
+import axios from 'axios';
 
 const socket = io(process.env.REACT_APP_API_URL, {
   transports: ['websocket'],
@@ -34,4 +35,6 @@ export default {
   motoboys: feathersClient.service('motoboys'),
   orders: feathersClient.service('orders'),
   paymentMethods: feathersClient.service('payment-methods'),
+  ifoodAuth: feathersClient.service('ifood-auth'),
+  request: axios,
 };

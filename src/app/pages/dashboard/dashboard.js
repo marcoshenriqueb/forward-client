@@ -9,6 +9,7 @@ import actions from './../../store/actions';
 const {
   logout: logoutAction,
   fetchOrders: fetchOrdersAction,
+  requestIfoodToken: requestIfoodTokenAction,
 } = actions;
 
 class Dashboard extends Component {
@@ -33,8 +34,14 @@ class Dashboard extends Component {
               ))
             }
             <Link to="/novo-pedido">
-              <button className="btn btn-outline-success btn-lg">Novo pedido</button>
+              <button className="btn btn-outline-success btn-lg mr-1">Novo pedido</button>
             </Link>
+            <button
+              className="btn btn-outline-danger btn-lg"
+              onClick={this.props.requestIfoodToken}
+            >
+              IFood
+            </button>
           </div>
           <span onClick={this.props.logout}>Sair</span>
         </div>
@@ -57,6 +64,7 @@ Dashboard.propTypes = {
   }).isRequired,
   logout: PropTypes.func.isRequired,
   fetchOrders: PropTypes.func.isRequired,
+  requestIfoodToken: PropTypes.func.isRequired,
 };
 
 const DashboardConnector = connect(state => (
@@ -67,6 +75,7 @@ const DashboardConnector = connect(state => (
   {
     logout: () => dispatch(logoutAction()),
     fetchOrders: () => dispatch(fetchOrdersAction()),
+    requestIfoodToken: () => dispatch(requestIfoodTokenAction()),
   }
 ))(Dashboard);
 
