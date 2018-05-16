@@ -46,15 +46,13 @@ const getOrderDetails = () => (
       method: 'get',
       headers: getHeaders(store.getState().ifood.token.data),
     }).then((data) => {
-      console.log(1);
+      const cash = data.data.payments.filter(p => p.code === 'DIN');
       order.createOrder({
         address: data.data.deliveryAddress.formattedAddress,
-        paymentMethods: data.data.payments.map(p => ({ ifoodCode: p.code })),
-        change: data.data.payments[0].change - data.data.payments[0].value,
+        paymentMethodIfoodCodes: data.data.payments.map(p => p.code),
+        change: cash.length ? cash[0].change - cash[0].value : 0,
         clientName: data.data.customer.name,
-      })().then(() => {
-        console.log(2);
-      }).catch((error) => { console.log(3, error); });
+      })().catch((error) => { console.log(3, error); });
       dispatch(removeAcknowledgedOrder(orders[0].id));
     });
   }
